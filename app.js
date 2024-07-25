@@ -5,7 +5,6 @@ const BMI = require('./models/bmi');
 const app = express();
 const port = 3000;
 
-// Replace <username>, <password>, and <cluster-url> with your MongoDB Atlas credentials
 const mongoURI = 'mongodb+srv://jonathonhdavis:Zk9awab8NGWnorhe@cluster0.gssmxmj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -47,6 +46,28 @@ app.post('/delete/:id', async (req, res) => {
         res.redirect('/');
     } catch (error) {
         console.error('Error in POST /delete/:id:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/edit/:id', async (req, res) => {
+    try {
+        const record = await BMI.findById(req.params.id);
+        res.render('edit', { record });
+    } catch (error) {
+        console.error('Error in GET /edit/:id:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/edit/:id', async (req, res) => {
+    try {
+        const { weight, height } = req.body;
+        const bmi = weight / (height * height);
+        await BMI.findByIdAndUpdate(req.params.id, { weight, height, bmi });
+        res.redirect('/');
+    } catch (error) {
+        console.error('Error in POST /edit/:id:', error);
         res.status(500).send('Internal Server Error');
     }
 });

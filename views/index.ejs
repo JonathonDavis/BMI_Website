@@ -43,6 +43,9 @@
                             <form action="/delete/<%= record._id %>" method="POST" style="display:inline;">
                                 <button class="delete-btn" type="submit">Remove Entry</button>
                             </form>
+                            <form action="/edit/<%= record._id %>" method="GET" style="display:inline;">
+                                <button class="edit-btn" type="submit">Edit Entry</button>
+                            </form>
                         </div>
                     </li>
                 <% }) %>
